@@ -18,13 +18,13 @@ O comando apresentado no início (`openssl rand -base64 1024`) permite gerar *by
 
 Os tempos de execução obtidos para cada um dos comandos propostos são apresentados na tabela que se segue:
 
-|                 Comando utilizado                 | Tempo de resolução |
-| :-----------------------------------------------: | :----------------: |
-|            `openssl rand -base64 1024`            |     0.024 seg      |
-|  `head -c 32 /dev/random | openssl enc -base64`   |     0.010 seg      |
-|  `head -c 64 /dev/random | openssl enc -base64`   |     0.011 seg      |
-| `head -c 1024 /dev/random | openssl enc -base64`  |   11 min 23 seg    |
-| `head -c 1024 /dev/urandom | openssl enc -base64` |     0.151 seg      |
+|                 Comando utilizado                  | Tempo de resolução |
+| :------------------------------------------------: | :----------------: |
+|            `openssl rand -base64 1024`             |     0.024 seg      |
+|  `head -c 32 /dev/random \| openssl enc -base64`   |     0.010 seg      |
+|  `head -c 64 /dev/random \| openssl enc -base64`   |     0.011 seg      |
+| `head -c 1024 /dev/random \| openssl enc -base64`  |   11 min 23 seg    |
+| `head -c 1024 /dev/urandom \| openssl enc -base64` |     0.151 seg      |
 
 Através dos resultados obtidos, verifica-se que na geração de números pseudoaleatórios de tamanhos reduzidos (32 e 64 *bits*) não se evidencia o reduzido de desempenho na utilização do dispositivo `/dev/random`. Contudo, quando se solicita a geração de um número pseudoaleatório de tamanho superior, verifica-se uma grande diferença de desempenho em relação à utilização do `/dev/urandom` (11 minutos e 23 segundos em relação a menos de 1 segundo). Salienta-se ainda um desempenho ligeiramente superior, em relação à utilização do dispositivo `/dev/urandom`, na implementação do *openssl*.
 
@@ -36,13 +36,13 @@ O projeto [haveged](http://www.issihosts.com/haveged/index.html) é uma adaptaç
 
 Após a instalação do *daemon* **haveged** e repetição dos comandos indicados na pergunta anterior, obtiveram-se as seguintes medições dos tempos de execução:
 
-|                 Comando utilizado                 | Tempo de resolução |
-| :-----------------------------------------------: | :----------------: |
-|            `openssl rand -base64 1024`            |     0.011 seg      |
-|  `head -c 32 /dev/random | openssl enc -base64`   |     0.010 seg      |
-|  `head -c 64 /dev/random | openssl enc -base64`   |     0.011 seg      |
-| `head -c 1024 /dev/random | openssl enc -base64`  |     0.109 seg      |
-| `head -c 1024 /dev/urandom | openssl enc -base64` |     0.013 seg      |
+|                 Comando utilizado                  | Tempo de resolução |
+| :------------------------------------------------: | :----------------: |
+|            `openssl rand -base64 1024`             |     0.011 seg      |
+|  `head -c 32 /dev/random \| openssl enc -base64`   |     0.010 seg      |
+|  `head -c 64 /dev/random \| openssl enc -base64`   |     0.011 seg      |
+| `head -c 1024 /dev/random \| openssl enc -base64`  |     0.109 seg      |
+| `head -c 1024 /dev/urandom \| openssl enc -base64` |     0.013 seg      |
 
 Conforme esperado, os tempos de execução diminuíram, de forma geral, com especial relevância para o gerador que se baseia no dispositivo `/dev/random`, com o tamanho de 1024 *bits* (passou de 11 minutos e 23 segundos para menos de 1 segundo). Relativamente aos tamanhos inferiores (32 e 64 *bits*), não se verificou melhoria de performance, uma vez que estes comprimentos são demasiado reduzidos para a diferença ser visível.
 
