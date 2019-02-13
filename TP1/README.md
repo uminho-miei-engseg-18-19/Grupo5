@@ -14,7 +14,7 @@ Por um lado, o dispositivo`/dev/random` requer espera pelo resultado (*bytes*), 
 
 Por outro lado, o dispositivo `/dev/urandom` não bloqueia devido à reduzida entropia disponível. Este mecanismo retorna valores independentemente de existir entropia suficiente, caso em que, teoricamente, estes são vulneráveis a ataques criptográficos. Neste caso, a entropia apenas é utilizada para gerar uma *seed*, com qualidade superior ou inferior (de acordo com a entropia disponível). De seguida, os *bytes* do resultado são gerados por um *pseudorandom number generator*.
 
-O comando apresentado no início (`openssl rand -base64 1024`) permite gerar *bytes* *pseudoaleatórios*, após fornecer, uma vez, uma *seed* ao  *pseudorandom number generator*, e a codifica os mesmos em *base64*. É utilizado o ficheiro `$HOME/.rnd` ou `.rnd` (poderiam ainda considerar-se ficheiros adicionais passados como argumento) para gerar a *seed*.
+O comando apresentado no início (`openssl rand -base64 1024`) permite gerar *bytes* pseudoaleatórios, após fornecer, uma vez, uma *seed* ao *pseudorandom number generator*, e codifica os mesmos em *base64*. É utilizado o ficheiro `$HOME/.rnd` ou `.rnd` (poderiam ainda considerar-se ficheiros adicionais passados como argumento) para gerar a *seed*.
 
 Os tempos de execução obtidos para cada um dos comandos propostos são apresentados na tabela que se segue:
 
@@ -50,9 +50,45 @@ Conforme esperado, os tempos de execução diminuíram, de forma geral, com espe
 
 ### Pergunta P1.3
 
+O programa foi executado através do comando `python generateSecret-app.py 1024`, tendo dado origem ao seguinte *output*:
 
+```
+output
+```
 
+Verifica-se que, de facto, o *output* gerado apenas contém letras e números. Isto deve-se à implementação da função `generateSecret` do módulo `shamirsecret`. Primeiramente, o algoritmo começa por gerar uma sequência de *bytes* pseudoaleatórios com o comprimento em falta no segredo (`s`). De seguida, é avaliado se cada um dos *bytes* é uma letra (`string.ascii_letters`) ou dígito (`string.digits`) e se o comprimento final do segredo ainda não foi atingido, caso em que se concatena o respetivo *byte* ao segredo. Enquanto o comprimento solicitado para o segredo não for atingido, o processo referido anteriormente é repetido.
 
+O código descrito a cima é apresentado de seguida:
+
+```python
+def generateRandomData(length):
+    return os.urandom(length)
+
+def generateSecret(secretLength):
+	l = 0
+	secret = ""
+	while (l < secretLength):
+		s = utils.generateRandomData(secretLength - l)
+		for c in s:
+			if (c in (string.ascii_letters + string.digits) and l < secretLength): # printable character
+				l += 1
+				secret += c
+	return secret
+```
+
+Para não limitar o *output* a letras e dígitos realizaram-se as seguintes alterações:
+
+```
+import base64
+def generateSecret(secretLength):
+	return base64.b64encode(utils.generateRandomData(secretLength))
+```
+
+De facto, já não se limita a que apenas os *bytes* que representem letras e dígitos sejam considerados. Assim, torna-se necessário transformar os *bytes* resultantes em *bytes* imprimíveis, realizado através da função `base64.b64encode`. Este facto pode ser testado executando o programa com a nova função, através do qual se obtém o seguinte *output*:
+
+```
+output
+```
 
 
 
