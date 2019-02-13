@@ -233,7 +233,24 @@ Concluindo, o programa `recoverSecretFromAllComponents-app.py` será fundamental
 
 ### Pergunta P3.1
 
+```
+def cifrar(texto_limpo, etiqueta, palavra_chave):
+	crypto = cifra(texto_limpo)
+	data = today()
+	salt = geracao_aleatoria(16)
+	chave = geracao_chave(palavra_chave, salt)
+	mac = hmac(chave, crypto + data + etiqueta)
+	return (crypto, data, etiqueta, mac)
 
+
+
+def decifrar(criptograma, data_limite, palavra_chave)
+	if today() <= data_limite:
+		(crypto, data, etiqueta, mac) = criptograma
+		texto_limpo = decifra(crypto, obtem_chave(data))
+		verificar hmac
+	return texto_limpo ou erro
+```
 
 
 
