@@ -233,23 +233,32 @@ Concluindo, o programa `recoverSecretFromAllComponents-app.py` será fundamental
 
 ### Pergunta P3.1
 
+- Temos que implementar todas as funções que não sejam da API?
+- Temos que respeitar o triangulo CIA para a etiqueta também?
+- Temos que verificar a data? Ou é feito no decifra?
+- O decifra não devia receber a data? Onde se arranja a chave para dar ao decifra?
+
 ```
 def cifrar(texto_limpo, etiqueta, palavra_chave):
-	crypto = cifra(texto_limpo)
+	crypto = cifra(len(etiqueta) + '|' + etiqueta + texto_limpo)
 	data = today()
 	salt = geracao_aleatoria(16)
-	chave = geracao_chave(palavra_chave, salt)
-	mac = hmac(chave, crypto + data + etiqueta)
-	return (crypto, data, etiqueta, mac)
-
-
+	chave = geracao_chave_mac(palavra_chave, salt)
+	mac = hmac(chave, crypto + data)
+	return (crypto, data, mac, salt)
 
 def decifrar(criptograma, data_limite, palavra_chave)
-	if today() <= data_limite:
-		(crypto, data, etiqueta, mac) = criptograma
+	texto_limpo = None
+	etiqueta = None
+	(crypto, data, mac, salt) = criptograma
+	chave = geracao_chave_mac(palavra_chave, salt)
+	new_mac = hmac(chave, crypto + data)
+	if mac == new_mac:
 		texto_limpo = decifra(crypto, obtem_chave(data))
-		verificar hmac
-	return texto_limpo ou erro
+		etiqueta, segredo = split_etiqueta(texto_limpo)
+		if today() > data_limite:
+			segredo = None
+	return etiqueta, segredo
 ```
 
 
@@ -262,11 +271,116 @@ def decifrar(criptograma, data_limite, palavra_chave)
 
 ### Pergunta P4.1 - Itália (ECs "Banca d'Italia" e "Ministero della Difesa")
 
+A entidade de certificação "Banca d'Italia" emite certificados com as seguintes características:
+
+- **Algoritmo de assinatura**: RSA com SHA256
+- **Algoritmo de chave pública**: RSA
+- **Tamanho da chave**: 4096 bit
+
+Estes factos podem ser comprovados com base na análise do *output* obtido através da execução do comando `openssl x509 -in cert.crt -text -noout` sobre o conteúdo *Base 64-encoded* do respetivo certificado:
+
+```
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1204168849 (0x47c62891)
+        Signature Algorithm: sha256WithRSAEncryption  <------
+        Issuer: C = IT, O = Banca d'Italia/00950501007, OU = Servizi di certificazione, CN = Banca d'Italia
+        Validity
+            Not Before: Nov 24 08:43:33 2014 GMT
+            Not After : Nov 24 09:13:33 2034 GMT
+        Subject: C = IT, O = Banca d'Italia/00950501007, OU = Servizi di certificazione, CN = Banca d'Italia
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption       <------
+                RSA Public-Key: (4096 bit)            <------
+                Modulus:
+                    00:ec:b5:44:63:77:63:83:9d:6a:44:54:0d:29:5e:
+                    [...]
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: critical
+                CA:TRUE, pathlen:1
+            X509v3 Key Usage: critical
+                Certificate Sign, CRL Sign
+            X509v3 Certificate Policies: 
+                Policy: 1.3.76.38.1.1.1
+                  CPS: http://www.bancaditalia.it/firmadigitale
+
+            X509v3 CRL Distribution Points: 
+
+                Full Name:
+                  URI:ldap://ldap.firmadigitale.bancaditalia.it/cn=WinCombined1,cn=Banca%20d'Italia,ou=Servizi%20di%20certificazione,o=Banca%20d'Italia/00950501007,c=IT?certificateRevocationList
+                  URI:http://www.firmadigitale.bancaditalia.it/crl/crl1.crl
+
+                Full Name:
+                  DirName:C = IT, O = Banca d'Italia/00950501007, OU = Servizi di certificazione, CN = Banca d'Italia, CN = CRL1
+
+            X509v3 Subject Key Identifier: 
+                BE:09:DE:0F:DA:AE:81:7F:D9:83:69:2B:48:14:50:B4:87:72:F6:81
+    Signature Algorithm: sha256WithRSAEncryption       <------
+         4b:d2:6c:a2:19:1b:83:a2:9c:53:bc:76:e1:cb:81:d0:d5:a4:
+         [...]
+```
 
 
+A entidade de certificação "Ministero della Difesa" emite certificados com as seguintes características:
 
+- **Algoritmo de assinatura**: RSA com SHA256
+- **Algoritmo de chave pública**: RSA
+- **Tamanho da chave**: 4096 bit
 
+Estes factos podem ser comprovados com base na análise do *output* obtido através da execução do comando `openssl x509 -in cert.crt -text -noout` sobre o conteúdo *Base 64-encoded* do respetivo certificado:
 
+```
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 6936921824674324395 (0x6044e5a56a5e1fab)
+        Signature Algorithm: sha256WithRSAEncryption   <------
+        Issuer: C = IT, O = Ministero della Difesa, OU = S.M.D. - C.do C4 Difesa, serialNumber = 97355240587, CN = Ministero della Difesa - CA di Firma Digitale
+        Validity
+            Not Before: Jul 15 08:11:41 2014 GMT
+            Not After : Jul 15 08:11:41 2044 GMT
+        Subject: C = IT, O = Ministero della Difesa, OU = S.M.D. - C.do C4 Difesa, serialNumber = 97355240587, CN = Ministero della Difesa - CA di Firma Digitale
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption        <------
+                RSA Public-Key: (4096 bit)             <------
+                Modulus:
+                    00:c7:91:49:da:58:d2:68:ca:80:5b:1d:77:37:76:
+                    [...]
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            Authority Information Access: 
+                OCSP - URI:http://ocsppkiff.difesa.it/
+
+            X509v3 Subject Key Identifier: 
+                E0:39:51:60:B3:30:50:53:A5:32:62:21:BB:B2:88:21:D3:B7:05:13
+            X509v3 Basic Constraints: critical
+                CA:TRUE, pathlen:0
+            X509v3 Certificate Policies: 
+                Policy: 1.3.6.1.4.1.14031.2.1.1
+                  CPS: http://www.pki.difesa.it/ManualeOperativoDifesa.pdf
+
+            X509v3 CRL Distribution Points: 
+
+                Full Name:
+                  URI:http://www.pki.difesa.it/cafirmadigitale.crl
+
+                Full Name:
+                  URI:ldap://ldappkiff.difesa.it:389/CN=Ministero%20della%20Difesa%20-%20CA%20di%20Firma%20Digitale,OU=S.M.D.%20-%20C.do%20C4%20Difesa,O=Ministero%20della%20Difesa,C=IT
+
+            X509v3 Key Usage: critical
+                Certificate Sign, CRL Sign
+    Signature Algorithm: sha256WithRSAEncryption       <------
+         71:9d:8c:a7:74:40:5c:db:9d:70:2d:b9:78:56:aa:be:d9:a7:
+         [...]
+```
+
+A análise dos certificados de ambas as entidades permite concluir que os algoritmos e os comprimentos de chaves utilizados são iguais. Efetivamente, a utilização do algoritmo RSA com 4096 bit vai de encontro às recomendações realizadas pela *European Union Agency for Network and Information Security* (ENISA), que estima que este algoritmo com um tamanho de chaves maior ou igual a 3072 bit mantenha as suas características de segurança por 10-50 anos. Da mesma forma, prevê que a utilização da função de hash criptográfica SHA256 se mantenha segura pelo mesmo intervalo de tempo.
+
+Mais ainda, é de salientar que as datas de validade dos certificados das ECs "Banca d'Italia" e "Ministero della Difesa" (2034-11-24 e 2044-07-15, respetivamente) se encontram inseridas no intervalo de tempo previamente especificado, em que os algoritmos inerentes às mesmas são considerados seguros.
+
+Contudo, pode-se realçar como aspeto menos positivo a redução de eficiência no algoritmo RSA, quando se utilizam chaves com tamanho superior a 3072 bit. Desta forma, propõe-se que em iterações futuras se pondere a utilização de curvas elípticas, uma vez que permite obter o mesmo nível de segurança com chaves de tamanho inferior. De facto, a utilização de chaves com 256 bit bastaria para igualar o nível de segurança conseguido pelo RSA com chaves de 3072 bit.
 
 
 
@@ -275,3 +389,5 @@ def decifrar(criptograma, data_limite, palavra_chave)
 [Wikipedia - */dev/random*](https://en.wikipedia.org/wiki//dev/random?fbclid=IwAR3oZenGHfHH0Zq5myM0nq90_IBgkuNUQ_VTqCoIl1K2BoY23Y3W0YrPiLw)
 
 [stackoverflow - *differences between random and urandom*](https://stackoverflow.com/questions/23712581/differences-between-random-and-urandom)
+
+[ENISA - *Algorithms, key size and parameters report 2014*](https://www.enisa.europa.eu/publications/algorithms-key-size-and-parameters-report-2014)
