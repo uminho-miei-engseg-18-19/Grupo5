@@ -10,7 +10,7 @@
 
 Para responder a esta questão, torna-se necessário evidenciar a diferença entre a geração de números pseudoaleatórios com o recurso ao dispositivo `/dev/random` e ao `/dev/urandom`. Estes são ficheiros especiais do sistema *Linux* que têm acesso ao ruído presente no sistema operativo, utilizando a entropia disponível para gerar *bytes* ou uma *seed* pseudoaleatórios, respetivamente.
 
-Por um lado, o dispositivo`/dev/random` requer espera pelo resultado (*bytes*), pois utiliza uma *entropy pool*. Assim, este mecanismo pode bloquear enquanto não for possível gerar dados aleatórios suficientes. Contudo, a realização de chamadas ao sistema operativo permite aumentar a entropia disponível e, consequentemente, possibilitar a geração da quantidade de *bytes* solicitada. Faz sentido utilizar este dispositivo quando são exigidos maiores níveis de qualidade na aleatoriedade.
+Por um lado, o dispositivo `/dev/random` requer espera pelo resultado (*bytes*), pois utiliza uma *entropy pool*. Assim, este mecanismo pode bloquear enquanto não for possível gerar dados aleatórios suficientes. Contudo, a realização de chamadas ao sistema operativo permite aumentar a entropia disponível e, consequentemente, possibilitar a geração da quantidade de *bytes* solicitada. Faz sentido utilizar este dispositivo quando são exigidos maiores níveis de qualidade na aleatoriedade.
 
 Por outro lado, o dispositivo `/dev/urandom` não bloqueia devido à reduzida entropia disponível. Este mecanismo retorna valores independentemente de existir entropia suficiente, caso em que, teoricamente, estes são vulneráveis a ataques criptográficos. Neste caso, a entropia apenas é utilizada para gerar uma *seed*, com qualidade superior ou inferior (de acordo com a entropia disponível). De seguida, os *bytes* do resultado são gerados por um *pseudorandom number generator*.
 
@@ -233,10 +233,12 @@ Concluindo, o programa `recoverSecretFromAllComponents-app.py` será fundamental
 
 ### Pergunta P3.1
 
-- Temos que implementar todas as funções que não sejam da API?
-- Temos que respeitar o triangulo CIA para a etiqueta também?
-- Temos que verificar a data? Ou é feito no decifra?
-- O decifra não devia receber a data? Onde se arranja a chave para dar ao decifra?
+Tendo em conta o cenário identificado, considera-se a existência de algumas funções auxiliares, com as seguintes assinaturas:
+
++ `today()`, que retorna a data presente
++ `geracao_aleatoria(n)`, que retorna uma *string* pseudoaleatória com `n` *bit*
++ `geracao_chave_mac(palavra_chave, salt)`, que retorna uma chave obtida a partir da palavra-chave e do `salt`
++ `hmac(chave, mensagem_bytes)`, que retorna o HMAC da mensagem passada como argumento
 
 ```
 def cifrar(texto_limpo, etiqueta, palavra_chave):
