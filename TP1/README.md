@@ -241,7 +241,7 @@ Tendo em conta o cenário identificado, considera-se a existência de algumas fu
 
 Deste modo, propõe-se a seguinte implementação, com o objetivo de garantir confidencialidade, integridade e autenticidade do segredo. Além disso, para a etiqueta, apenas se assegura a integridade e autenticidade.
 
-```
+```python
 def cifrar(texto_limpo, etiqueta, palavra_chave):
 	crypto = cifra(texto_limpo)
 	data = today()
