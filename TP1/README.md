@@ -238,28 +238,32 @@ Tendo em conta o cenário identificado, considera-se a existência de algumas fu
 + `today()`, que retorna a data presente
 + `geracao_aleatoria(n)`, que retorna uma *string* pseudoaleatória com `n` *bit*
 + `geracao_chave_mac(palavra_chave, salt)`, que retorna uma chave obtida a partir da palavra-chave e do `salt`
-+ `hmac(chave, mensagem_bytes)`, que retorna o HMAC da mensagem passada como argumento
+
+Deste modo, propõe-se a seguinte implementação, com o objetivo de garantir confidencialidade, integridade e autenticidade do segredo. Além disso, para a etiqueta, apenas se assegura a integridade e autenticidade.
 
 ```
 def cifrar(texto_limpo, etiqueta, palavra_chave):
-	crypto = cifra(len(etiqueta) + '|' + etiqueta + texto_limpo)
+	crypto = cifra(texto_limpo)
 	data = today()
 	salt = geracao_aleatoria(16)
 	chave = geracao_chave_mac(palavra_chave, salt)
-	mac = hmac(chave, crypto + data)
-	return (crypto, data, mac, salt)
+	mac = hmac(chave, crypto + etiqueta + data)
+	return (crypto, etiqueta, data, mac, salt)
 
-def decifrar(criptograma, data_limite, palavra_chave)
+def decifrar(criptograma, data_limite, palavra_chave):
 	texto_limpo = None
 	etiqueta = None
-	(crypto, data, mac, salt) = criptograma
+	(crypto, etiqueta, data, mac, salt) = criptograma
 	chave = geracao_chave_mac(palavra_chave, salt)
-	new_mac = hmac(chave, crypto + data)
+	new_mac = hmac(chave, crypto + etiqueta + data)
 	if mac == new_mac:
-		texto_limpo = decifra(crypto, obtem_chave(data))
-		etiqueta, segredo = split_etiqueta(texto_limpo)
 		if today() > data_limite:
 			segredo = None
+		else:
+			segredo = decifra(crypto, obtem_chave(data))
+	else:
+		etiqueta = None
+
 	return etiqueta, segredo
 ```
 
