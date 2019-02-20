@@ -33,32 +33,55 @@ blindMessage and blindComponents and pRComponents to STDOUT.
 """
 
 import sys
+import getopt
 from eVotUM.Cripto import eccblind
 
 
 def printUsage():
-    print("Usage: python generateBlindData-app.py")
+    print("Usage: python ofusca-app.py --msg <mensagem a assinar> --RDash <pRDashComponents>")
 
 def parseArgs():
-    if (len(sys.argv) > 1):
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "hm:d:", ["help", "msg=", "RDash="])
+    except getopt.GetoptError as err:
+        print(err)
         printUsage()
-    else:
-        main()
+        sys.exit(2)
+    data = None
+    pRDashComponents = False
+    for o, a in opts:
+        if o in ("-h", "--help"):
+            printUsage()
+            sys.exit()
+        elif o in ("-m", "--msg"):
+            data = a
+        elif o in ('-d', '--RDash'):
+            pRDashComponents = a
+        else:
+            print("opção desconhecida")
+            printUsage()
+            sys.exit(2)
+
+    if not data or not pRDashComponents:
+        print("tem que indicar a mensagem e o RDash")
+        printUsage()
+        sys.exit(2)
+
+    main(data, pRDashComponents)
 
 def showResults(errorCode, result):
-    print("Output")
     if (errorCode is None):
         blindComponents, pRComponents, blindM = result
-        print("Blind message: %s" % blindM)
-        print("Blind components: %s" % blindComponents)
-        print("pRComponents: %s" % pRComponents)
+        with open('components.dat','w+') as fp:
+            fp.write(blindComponents)
+            fp.write('\n')
+            fp.write(pRComponents)
+            fp.write('\n')
+        print(blindM)
     elif (errorCode == 1):
         print("Error: pRDash components are invalid")
 
-def main():
-    print("Input")
-    data = raw_input("Data: ")
-    pRDashComponents = raw_input("pRDash components: ")
+def main(data, pRDashComponents):
     errorCode, result = eccblind.blindData(pRDashComponents, data)
     showResults(errorCode, result)
 

@@ -33,17 +33,41 @@ from STDIN and writes the unblinded signature to STDOUT.
 """
 
 import sys
+import getopt
 from eVotUM.Cripto import eccblind
 
 
 def printUsage():
-    print("Usage: python unblindSignature-app.py")
+    print("Usage: python desofusca-app.py -s <Blind Signature> --RDash <pRDashComponents>")
 
 def parseArgs():
-    if (len(sys.argv) > 1):
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "hs:d:", ["help", "sgn=", "RDash="])
+    except getopt.GetoptError as err:
+        print(err)
         printUsage()
-    else:
-        main()
+        sys.exit(2)
+    blindSignature = None
+    pRDashComponents = False
+    for o, a in opts:
+        if o in ("-h", "--help"):
+            printUsage()
+            sys.exit()
+        elif o in ("-s", "--sgn"):
+            blindSignature = a
+        elif o in ('-d', '--RDash'):
+            pRDashComponents = a
+        else:
+            print("opção desconhecida")
+            printUsage()
+            sys.exit(2)
+
+    if not blindSignature or not pRDashComponents:
+        print("tem que indicar a mensagem e o RDash")
+        printUsage()
+        sys.exit(2)
+
+    main(blindSignature, pRDashComponents)
 
 def showResults(errorCode, signature):
     print("Output")
@@ -56,11 +80,9 @@ def showResults(errorCode, signature):
     elif (errorCode == 3):
         print("Error: invalid blind signature format")
 
-def main():
+def main(blindSignature, pRDashComponents):
     print("Input")
-    blindSignature = raw_input("Blind signature: ")
     blindComponents = raw_input("Blind components: ")
-    pRDashComponents = raw_input("pRDash components: ")
     errorCode, signature = eccblind.unblindSignature(blindSignature, pRDashComponents, blindComponents)
     showResults(errorCode, signature)
 
