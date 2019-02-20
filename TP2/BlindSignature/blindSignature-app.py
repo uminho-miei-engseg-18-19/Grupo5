@@ -32,19 +32,40 @@ Command line app that receives signer's private key from file and Passphrase, Bl
 initComponents from STDIN and writes Blind signature to STDOUT.
 """
 
-from eVotUM.Cripto import utils
 import sys
+import getopt
+from eVotUM.Cripto import utils
 from eVotUM.Cripto import eccblind
 
 def printUsage():
-    print("Usage: python generateBlindSignature-app.py private-key.pem")
+    print("Usage: python blindSignature-app.py --key <chave privada> --bmsg <Blind message>")
 
 def parseArgs():
-    if (len(sys.argv) != 2):
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "hk:m:", ["help", "key=", "bmsg="])
+        ops = dict(opts)
+        print(ops)
+        print(args)
+    except getopt.GetoptError as err:
+        print(err)
+        printUsage()
+        sys.exit(2)
+    if (len(sys.argv) != 5):
         printUsage()
     else:
-        eccPrivateKeyPath = sys.argv[1]
-        main(eccPrivateKeyPath)
+        for opt, arg in opts:
+            if opt in ("-h", "--help"):
+                printUsage()
+                sys.exit()
+            elif opt in ("-k", "--key"):
+                ecc_private_key_path = arg
+            elif opt in ("-m", "--bmsg"):
+                blind_mess = arg
+            else:
+                print("opção desconhecida")
+                printUsage()
+                sys.exit(2)
+        main(ecc_private_key_path, blind_mess)
 
 def showResults(errorCode, blindSignature):
     print("Output")
@@ -57,12 +78,16 @@ def showResults(errorCode, blindSignature):
     elif (errorCode == 3):
         print("Error: invalid blind message format")
 
-def main(eccPrivateKeyPath):
-    pemKey = utils.readFile(eccPrivateKeyPath)
+def main(eccPrivateKeyPath, blindM):
+    with open(eccPrivateKeyPath, 'r') as fp:
+        pemKey = fp.read()
+    print(pemKey)
+    #pemKey = utils.readFile(eccPrivateKeyPath)
     print("Input")
     passphrase = raw_input("Passphrase: ")
-    blindM = raw_input("Blind message: ")
-    initComponents = raw_input("Init components: ")
+    #blindM = raw_input("Blind message: ")
+    with open('components.dat', 'r') as fp:
+        initComponents = fp.readline()
     errorCode, blindSignature = eccblind.generateBlindSignature(pemKey, passphrase, blindM, initComponents)
     showResults(errorCode, blindSignature)
 
