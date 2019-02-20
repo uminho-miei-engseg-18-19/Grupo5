@@ -37,14 +37,17 @@ from eVotUM.Cripto import eccblind
 from eVotUM.Cripto import utils
 
 def printUsage():
-    print("Usage: python verifySignature-app.py public-key.pem")
+    print("Usage: python verify-app.py -cert <certificado do assinante> -msg <mensagem original a assinar> -sDash <Signature> -f <ficheiro do requerente>")
 
 def parseArgs():
-    if (len(sys.argv) != 2):
+    if (len(sys.argv) != 9 and sys.argv[1] != '-cert' and sys.argv[3] != '-msg' and sys.argv[5] != '-sDash' and sys.argv[7] != '-f'):
         printUsage()
     else:
-        eccPublicKeyPath = sys.argv[1]
-        main(eccPublicKeyPath)
+        eccPublicKeyPath = sys.argv[2]
+        msg = sys.argv[4]
+        sDash = sys.argv[6]
+        filename = sys.argv[8]
+        main(eccPublicKeyPath, msg, sDash, filename)
 
 def showResults(errorCode, validSignature):
     print("Output")
@@ -62,13 +65,10 @@ def showResults(errorCode, validSignature):
     elif (errorCode == 4):
         print("Error: invalid signature format")
 
-def main(eccPublicKeyPath):
+def main(eccPublicKeyPath, data, signature, componentsPath):
     pemPublicKey = utils.readFile(eccPublicKeyPath)
-    print("Input")
-    data = raw_input("Original data: ")
-    signature = raw_input("Signature: ")
-    blindComponents = raw_input("Blind components: ")
-    pRComponents = raw_input("pR components: ")
+    components = utils.readFile(componentsPath)
+    blindComponents, pRComponents = components.split('\n')
     errorCode, validSignature = eccblind.verifySignature(pemPublicKey, signature, blindComponents, pRComponents, data)
     showResults(errorCode, validSignature)
 
