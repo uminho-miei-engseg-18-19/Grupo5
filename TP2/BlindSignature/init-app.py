@@ -52,7 +52,7 @@ def parseArgs():
 
 def main(printOutput):
     initComponents, pRDashComponents = eccblind.initSigner()
-    with open('components.dat','w+') as fp:
+    with open('componentsAssinante.dat','w+') as fp:
         fp.write(initComponents)
         fp.write('\n')
         fp.write(pRDashComponents)

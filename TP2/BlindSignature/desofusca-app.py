@@ -58,19 +58,18 @@ def parseArgs():
         elif o in ('-d', '--RDash'):
             pRDashComponents = a
         else:
-            print("opção desconhecida")
+            print("Error: Unknown option.")
             printUsage()
             sys.exit(2)
 
     if not blindSignature or not pRDashComponents:
-        print("tem que indicar a mensagem e o RDash")
+        print("Error: Message and RDash required.")
         printUsage()
         sys.exit(2)
 
     main(blindSignature, pRDashComponents)
 
 def showResults(errorCode, signature):
-    print("Output")
     if (errorCode is None):
         print("Signature: %s" % signature)
     elif (errorCode == 1):
@@ -81,8 +80,8 @@ def showResults(errorCode, signature):
         print("Error: invalid blind signature format")
 
 def main(blindSignature, pRDashComponents):
-    print("Input")
-    blindComponents = raw_input("Blind components: ")
+    with open('componentsRequerente.dat','r') as fp:
+        blindComponents = fp.readline()
     errorCode, signature = eccblind.unblindSignature(blindSignature, pRDashComponents, blindComponents)
     showResults(errorCode, signature)
 

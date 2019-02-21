@@ -58,12 +58,12 @@ def parseArgs():
         elif o in ('-d', '--RDash'):
             pRDashComponents = a
         else:
-            print("opção desconhecida")
+            print("Error: Unknown option.")
             printUsage()
             sys.exit(2)
 
     if not data or not pRDashComponents:
-        print("tem que indicar a mensagem e o RDash")
+        print("Error: Message and RDash required.")
         printUsage()
         sys.exit(2)
 
@@ -72,7 +72,7 @@ def parseArgs():
 def showResults(errorCode, result):
     if (errorCode is None):
         blindComponents, pRComponents, blindM = result
-        with open('components.dat','w+') as fp:
+        with open('componentsRequerente.dat','w+') as fp:
             fp.write(blindComponents)
             fp.write('\n')
             fp.write(pRComponents)

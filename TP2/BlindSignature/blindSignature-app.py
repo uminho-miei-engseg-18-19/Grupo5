@@ -49,7 +49,9 @@ def parseArgs():
         printUsage()
         sys.exit(2)
     if (len(sys.argv) != 5):
+        print("Error: Key and blind message required.")
         printUsage()
+        sys.exit(2)
     else:
         for opt, arg in opts:
             if opt in ("-h", "--help"):
@@ -60,15 +62,15 @@ def parseArgs():
             elif opt in ("-m", "--bmsg"):
                 blind_mess = arg
             else:
-                print("opção desconhecida")
+                print("Error: Unknown option.")
                 printUsage()
                 sys.exit(2)
+
         main(ecc_private_key_path, blind_mess)
 
 def showResults(errorCode, blindSignature):
-    print("Output")
     if (errorCode is None):
-        print("Blind signature: %s" % blindSignature)
+        print(blindSignature)
     elif (errorCode == 1):
         print("Error: it was not possible to retrieve the private key")
     elif (errorCode == 2):
@@ -81,7 +83,7 @@ def main(eccPrivateKeyPath, blindM):
         pemKey = fp.read()
     print("Input")
     passphrase = raw_input("Passphrase: ")
-    with open('components.dat', 'r') as fp:
+    with open('componentsAssinante.dat', 'r') as fp:
         initComponents = fp.readline()
     errorCode, blindSignature = eccblind.generateBlindSignature(pemKey, passphrase, blindM, initComponents)
     showResults(errorCode, blindSignature)

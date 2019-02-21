@@ -35,22 +35,49 @@ prComponents from STDIN and writes a message to STDOUT indicating if the signatu
 import sys
 from eVotUM.Cripto import eccblind
 from eVotUM.Cripto import utils
+import getopt
 
 def printUsage():
-    print("Usage: python verify-app.py -cert <certificado do assinante> -msg <mensagem original a assinar> -sDash <Signature> -f <ficheiro do requerente>")
+    print("Usage: python verify-app.py --cert <certificado do assinante> --msg <mensagem original a assinar> --sDash <Signature> -f <ficheiro do requerente>")
 
 def parseArgs():
-    if (len(sys.argv) != 9 and sys.argv[1] != '-cert' and sys.argv[3] != '-msg' and sys.argv[5] != '-sDash' and sys.argv[7] != '-f'):
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "hc:m:d:f:", ["help", "cert=", "msg=", "sDash=", "file="])
+    except getopt.GetoptError as err:
+        print(err)
         printUsage()
-    else:
-        eccPublicKeyPath = sys.argv[2]
-        msg = sys.argv[4]
-        sDash = sys.argv[6]
-        filename = sys.argv[8]
-        main(eccPublicKeyPath, msg, sDash, filename)
+        sys.exit(2)
+
+    msg = None
+    eccPublicKeyPath = None
+    sDash = None
+    filename = None
+    
+    for o,a in opts:
+        if o in ("-h", "--help"):
+            printUsage()
+            sys.exit()
+        elif o in ("-c", "--cert"):
+            eccPublicKeyPath = a
+        elif o in ("-m", "--msg"):
+            msg = a
+        elif o in ("-d", "--sDash"):
+            sDash = a
+        elif o in ("-f", "--File"):
+            filename = a
+        else:
+            print("Error: Unknown option.")
+            printUsage()
+            sys.exit(2)
+        
+    if not msg or not eccPublicKeyPath or not sDash or not filename:
+        print("Error: Certificate, message, sDash and filename required.")
+        printUsage()
+        sys.exit(2)
+
+    main(eccPublicKeyPath, msg, sDash, filename)
 
 def showResults(errorCode, validSignature):
-    print("Output")
     if (errorCode is None):
         if (validSignature):
             print("Valid signature")
@@ -68,7 +95,7 @@ def showResults(errorCode, validSignature):
 def main(eccPublicKeyPath, data, signature, componentsPath):
     pemPublicKey = utils.readFile(eccPublicKeyPath)
     components = utils.readFile(componentsPath)
-    blindComponents, pRComponents = components.split('\n')
+    blindComponents, pRComponents = components.split('\n')[:2]
     errorCode, validSignature = eccblind.verifySignature(pemPublicKey, signature, blindComponents, pRComponents, data)
     showResults(errorCode, validSignature)
 
