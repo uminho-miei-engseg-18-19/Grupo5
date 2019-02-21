@@ -36,6 +36,7 @@ import sys
 import getopt
 from eVotUM.Cripto import utils
 from eVotUM.Cripto import eccblind
+from getpass import getpass
 
 def printUsage():
     print("Usage: python blindSignature-app.py --key <chave privada> --bmsg <Blind message>")
@@ -81,8 +82,7 @@ def showResults(errorCode, blindSignature):
 def main(eccPrivateKeyPath, blindM):
     with open(eccPrivateKeyPath, 'r') as fp:
         pemKey = fp.read()
-    print("Input")
-    passphrase = raw_input("Passphrase: ")
+    passphrase = getpass()
     with open('componentsAssinante.dat', 'r') as fp:
         initComponents = fp.readline()
     errorCode, blindSignature = eccblind.generateBlindSignature(pemKey, passphrase, blindM, initComponents)
