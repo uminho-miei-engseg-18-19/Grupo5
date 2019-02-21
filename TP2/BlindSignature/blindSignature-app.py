@@ -44,8 +44,6 @@ def parseArgs():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hk:m:", ["help", "key=", "bmsg="])
         ops = dict(opts)
-        print(ops)
-        print(args)
     except getopt.GetoptError as err:
         print(err)
         printUsage()
