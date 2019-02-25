@@ -8,6 +8,8 @@ Não é possível atribuir ao utilizador uma localização específica (e.g. EUA
 
 ### Pergunta P1.2 - 1
 
-![Circuito TOR](circuito_tor.png)
+<p align="center">
+	<img src="./images/circuito_tor.png">
+</p>
 
 Conforme se pode verificar através da imagem anterior, o circuito TOR é constituído por seis OR's, localizando-se os primeiros três em França, Canadá e França, respetivamente, e três OR's de *relay*.
