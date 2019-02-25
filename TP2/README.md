@@ -1,4 +1,4 @@
-# Trabalho Prático 1 - 18/Fev/2019
+# Trabalho Prático 2 - 18/Fev/2019
 
 ## 1. Assinaturas cegas (Blind signatures) baseadas no Elliptic Curve Discrete Logarithm Problem (ECDLP)
 
