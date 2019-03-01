@@ -22,10 +22,10 @@ Primeiramente, para providenciar um serviço anónimo a entidade responsável ne
 
 <div class="row">
   <div class="column">
-    <img src="./images/tor-onion-services-1.png" width="40%">
+    <img src="./images/tor-onion-services-1.png" width="50%">
   </div>
   <div class="column">
-    <img src="./images/tor-onion-services-2.png" width="40%">
+    <img src="./images/tor-onion-services-2.png" width="50%">
   </div>
 </div>
 
@@ -33,10 +33,10 @@ A partir deste ponto o serviço encontra-se pronto a ser acedido. Posteriormente
 
 <div class="row">
   <div class="column">
-    <img src="./images/tor-onion-services-3.png" width="40%">
+    <img src="./images/tor-onion-services-3.png" width="50%">
   </div>
   <div class="column">
-    <img src="./images/tor-onion-services-4.png" width="40%">
+    <img src="./images/tor-onion-services-4.png" width="50%">
   </div>
 </div>
 
@@ -44,10 +44,10 @@ O servidor *web* recebe o pedido de conexão por parte do utilizador, decifra o 
 
 <div class="row">
   <div class="column">
-    <img src="./images/tor-onion-services-5.png" width="40%">
+    <img src="./images/tor-onion-services-5.png" width="50%">
   </div>
   <div class="column">
-    <img src="./images/tor-onion-services-6.png" width="40%">
+    <img src="./images/tor-onion-services-6.png" width="50%">
   </div>
 </div>
 
