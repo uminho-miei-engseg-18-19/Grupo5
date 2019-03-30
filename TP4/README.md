@@ -61,11 +61,11 @@ TODO: Afonso
 
 O projeto que se pretende desenvolver consiste numa aplicação educativa para crianças, que permite a disponibilização de informações e testes relacionados com temas de carácter pedagógico, bem como estatísticas de acerto para o utilizador corrente. Para além disso, esta aplicação deverá permitir que professores consultem o desenvolvimento dos seus alunos.
 
-As credenciais de acesso dos alunos e professores são disponibilizadas pela escola. Cada aluno terá associado ao seu perfil os seguintes dados: nome completo, nome de utilizador, *password*, escola, ano e turma. Cada professor será caracterizado por: nome completo, nome de utilizador, *password* e escola.
+As credenciais de acesso dos alunos e professores são disponibilizadas pela escola. Cada aluno terá associado ao seu perfil os seguintes dados: número de aluno, nome completo, nome de utilizador, *password*, escola, ano e turma. Cada professor será caracterizado por: nome completo, nome de utilizador, *password* e escola.
 
-Após a autenticação, os professores podem disponibilizar informações e testes para os alunos de um ano e turma, num determinado ano letivo. Posteriormente, os alunos realizam os testes, que são automaticamente corrigidos e acrescentados ao respetivo histórico. Este, por sua vez,  apenas é acessível pelo próprio aluno. Mais ainda, o professor tem acesso às estatísticas dos testes por si efetuados, para os vários alunos.
+Após a autenticação, os professores podem disponibilizar informações e testes para os alunos de um ano e turma, num determinado ano letivo. Posteriormente, os alunos realizam os testes, que são automaticamente corrigidos e acrescentados ao respetivo histórico. Este, por sua vez, apenas é acessível pelo próprio aluno. Mais ainda, o professor tem acesso às estatísticas dos testes por si efetuados, para os vários alunos.
 
-A escola tem a possibilidade de apagar a conta de um aluno. Nesse caso, são removidos todos os dados associados ao aluno, exceto o respetivo histórico (anonimizado), que é mantido para fins estatísticos.
+A escola tem a possibilidade de apagar a conta de um aluno ou professor. Nesse caso, são removidos todos os dados associados ao utilizador, exceto o respetivo histórico (anonimizado), que é mantido para fins estatísticos.
 
 Desta forma, a aplicação proposta respeita os critérios 3 (monitorização sistemática) e 7 (dados sobre sujeitos vulneráveis) enunciados na pergunta anterior, pelo que é necessário efetuar o DPIA.
 
