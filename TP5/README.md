@@ -12,7 +12,7 @@ createGenesisBlock(){
 }
 ```
 
-### Pergunta 1.1
+### Pergunta 1.2
 
 O código alterado resultante é:
 
