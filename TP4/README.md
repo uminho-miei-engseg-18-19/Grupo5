@@ -26,6 +26,12 @@ Assim, há necessidade de se prever a possibilidade de remover ou anonimizar dad
 Secção 3
 
 1. Daniel
+A pseudonimização permite a obfuscação da identidade de um indivíduo, bem como a tornar a sua procura impossível através de diferentes domínios de processamento de dados. Deste modo, considera-se que as técnicas de pseudonimização cumpram dois objetivos:
++ Os pseudónimos de um dado indivíduo não podem ser fáceis de identificar por partes exteriores a um dado contexto de dados.
++ Os pseudónimos não serão simples de reproduzir por terceiras partes de modo a evitar que diferentes contextos de dados utilizem o mesmo pseudónimo para cada determinado indivíduo, certificando que nenhum utilizador pode ser ligado a a qualquer pseudónimo.
+
+Para tal, foram desenvolvido um conjunto de técnicas pela ENISA que pretendem proteger a identidade de indivíduos como medida de segurança.
+
 2. Afonso
 3. Mafalda
 
@@ -38,6 +44,18 @@ Da mesma forma, poderiam utilizar-se funções de *hash* sem chave, mas que rece
 Contudo, o *salt* não possui as mesmas propriedades de imprevisibilidade que as chaves secretas (tamanho inferior) e as funções de *hash* com chave são consideradas, geralmente, criptograficamente mais fortes.
 
 4. Daniel
+*Cifra como técnica de pseudonimização*
+
+A utilização de cifras simétricas, tais como o AES, é também considerado um método eficiente de gerar pseudónimos. Nestes, o identificador de um indivíduo é cifrado com uma chave simétrica que deverá ser conhecida apenas pelo controlador e processador dos dados, que, quando necessário, é utilizada para decifrar o pseudónimo para recuperar o identificador original.
+
+Tal como no caso das funções de *hash*, as chaves utilizadas têm um tamanho mínimo de 256 bits, tamanho tal considerado razoável para segurança mesmo em contexto quântico. No entanto, ao contrário das funções de *hash*, o controlador pode, a qualquer momento, recuperar o identificador do sujeito através de uma operação de decifragem. Assim, torna-se mais difícil o *tracking* de indivíduos devido ao facto de que estes não necessitam guardar os identificadores.
+
+[comment] Assim, a cifra simétrica pode ser utilizada em casos nos quais o controlador necessita seguir os sujeitos, bem como conhecer os seus identificadores.
+
+Por outro lado, as cifras assimétricas têm também um conjunto de caraterísticas que as tornam úteis na pseudonimização. A sua estrutura de chave pública ajusta-se bem para contextos nos quais o controlador de dados responsável por efetuar a pseudonimização não está autorizado para recuperar a respetiva identidade, utilizando a chave pública correspondente a um controlador que guarda a respetiva chave privada. Deste modo, permite-se a separação de tarefas de segurança. Ainda mais, recorrendo à utilização de valores aleatórios assegura que os pseudónimos gerados não podem ser utilizados para seguir o percurso de um indivíduo através de vários contextos de dados.
+
+É de notar, no entanto, que algoritmos de chaves assimétricas são bastante menos eficientes do que os de chaves simétricas, necessitando chaves de tamanho elevado, 3072 bits no caso do RSA. Mesmo recorrendo a curvas elíticas, que utilizam chaves bastante menores incorrem tempos de processamento mais longos.
+
 5. Afonso
 6. Mafalda
 
