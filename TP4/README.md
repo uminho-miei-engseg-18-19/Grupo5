@@ -90,6 +90,8 @@ Desta forma, a aplicação proposta respeita os critérios 3 (monitorização si
 
 ### Pergunta P1.3 - 3
 
+O *template* DPIA encontra-se no ficheiro (PIA-1.3.3)[./PIA-1.3.3.pdf].
 
 ### Pergunta P1.4
 
+O *template* DPIA encontra-se no ficheiro (PIA-1.4.3)[./PIA-1.4.3.pdf].
