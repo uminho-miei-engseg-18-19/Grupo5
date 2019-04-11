@@ -33,6 +33,16 @@ A pseudonimização permite a obfuscação da identidade de um indivíduo, bem c
 Para tal, foram desenvolvido um conjunto de técnicas pela ENISA que pretendem proteger a identidade de indivíduos como medida de segurança.
 
 2. Afonso
+
+*Hashing without key*
+
+Uma função de hash criptográfica `h` (e.g. SHA-2 e SHA-3) tem como objetivo transformar qualquer mensagem `m` de tamanho arbitrário num valor de hash `h(m)` de tamanho fixo. Apesar destas funções terem propriedades como *pre-image resistance*, *2nd pre-image resistance* e *collision resistance*, não cumprem alguns dos requisitos necessários na pseudonimização como:
+
+- **D1**: é trivial, por terceiros, a verificação se um pseudónimo corresponde a um dado identificador.
+- **D2**: terceiros conseguem aplicar a mesma função de hash e a partir de um identificador obter o mesmo pseudónimo.
+
+Desta forma, esta técnica é considerada pelo RGPD como sendo fraca, pois pode ser revertida sem informação adicional. Logo, não deve ser usada isoladamente para obter pseudonimização.
+
 3. Mafalda
 
 *Hashing with key or salt*
@@ -57,6 +67,15 @@ Por outro lado, as cifras assimétricas têm também um conjunto de caraterísti
 É de notar, no entanto, que algoritmos de chaves assimétricas são bastante menos eficientes do que os de chaves simétricas, necessitando chaves de tamanho elevado, 3072 bits no caso do RSA. Mesmo recorrendo a curvas elíticas, que utilizam chaves bastante menores incorrem tempos de processamento mais longos.
 
 5. Afonso
+
+Outras técnicas baseadas em criptografia
+
+Além das abordagens anteriormente mencionadas, é possível combinar esquemas criptográficos e obter um abordagem de pseudonimização segura. A título exemplificativo, tem-se a geração de diferentes pseudónimos para os vários domínios que compõe um sistema, através de *polymorphic encryption*. 
+
+Mais ainda, existem as chamadas, soluções descentralizadas. Nestas cada participante gera e controla os seus próprios pseudónimos. De facto, esta é uma estratégia muitas vezes aplicada quando o controlador dos dados não pode ter conhecimento prévio da identidade dos utilizadores, ou seja, o acesso apenas é conseguido depois do utilizador assim o entender.
+
+Por fim, referir que o desafio que todos os métodos enfrentam está relacionado com a gestão da chave. Este processo não é de todo trivial, uma vez que depende tanto da escala da aplicação, como da própria técnica escolhida.
+
 6. Mafalda
 
 *Tokenisation*
@@ -73,7 +92,32 @@ Apesar da eficiência da tokenização, a sua implementação pode, dependendo d
 
 ### Pergunta P1.3 - 1
 
-TODO: Afonso
+Os nove critérios que devem ser considerados para avaliar se o processamento de dados pessoais irá resultar num risco elevado são os seguintes:
+
+1. **Avaliação e pontuação**, incluindo a criações de perfis e previsão, especialmente se envolver aspetos relacionados com dados do desempenho no trabalho, situação económica, saúde, preferências pessoais ou interesses, confiabilidade ou comportamento, localização ou movimentos.
+
+2. **Realização automática de decisões relacionadas com aspetos legais ou de igual importância**. Por exemplo, o processamento pode levar a exclusão ou discriminação de indivíduos.
+
+3. **Monitorização sistemática**: processamento usado para observar, monitorizar ou controlar indivíduos, incluindo dados armazenados através de redes ou uma monitorização sistemática de uma área de acesso público. Este é um critério uma vez que os indivíduos podem não ter conhecimento que estão a ser recolhidos dados a seu respeito. Mais ainda, pode ser impossível evitar tal processamento caso este seja feito em espaços públicos.
+
+4. **Dados sensíveis ou de natureza altamente pessoal**: inclui dados pessoais como opinião política, registo criminal, registo médico, informações armazenadas por investigadores privados, documentos pessoais, emails, diários, notas, informação pessoal encontrada em aplicações que façam um registo da vida do indivíduo, entre outros. Estes dados pessoais são considerados sensíveis, porque estão ligados ao agregado familiar e atividades privadas, ou porque influenciam o exercício de um direito fundamental, ou porque a sua violação claramente acarreta sérios impactos na vida do dia à dia do indivíduo. Neste critério é importante ter em conta se os dados já foram tornados públicos pelo indivíduo ou se for através de terceiros. Se foi tornado público importa averiguar se era esperado que os dados fossem processados de determinada forma.
+
+5. **Processamento de dados em grande escala**: apesar de o RGPD não definir o que é considerado grande escala, é importante ter em conta os seguintes fatores na sua definição:
+
+	1. número de indivíduos afetados;
+	2. o volume de dados a ser processado;
+	3. a duração ou permanência do processamento dos dados;
+	4. a extensão geográfica abrangida pelo processamento dos dados.
+
+6. **Combinação de datasets**: por exemplo combinando dois ou mais *datasets*, que foram criados com diferentes propósitos, de forma a extrapolar os objetivos para os quais os dados foram cedidos.
+
+7. **Dados relacionados com indivíduos vulneráveis**: a existência deste critério está relacionada com a discrepância de poder entre quem controla os dados e de quem os dados são sobre, ou seja, os indivíduos podem não conseguir consentir, opor-se ao processamento dos seus dados ou exercer os seus direitos. De entre os indivíduos vulneráveis tem-se as crianças, empregados, funcionários, segmentos da população que necessitam de proteção especial (e.g. pessoas com doenças mentais, idosos, pacientes, etc) e todo e qualquer caso em que exista um desequilíbrio entre a posição do indivíduo dos dados e o controlador dos mesmos.
+
+8. **Uso inovador ou aplicação de nova tecnologia ou soluções organizacionais**: por exemplo, a combinação do uso da impressão digital com reconhecimento facial para melhorar o controlo de acesso físico, entre outros. De realçar que as consequências pessoais e sociais do desenvolvimento de novas tecnologias são desconhecidas, e por isso deve ser feito um DPIA para avaliar tais fatores.
+
+9. Quando o processamento em si **previne os indivíduos de exercer um direito ou usar um serviço ou contrato**. Isto inclui operações de processamento que têm como objetivo permitir, modificar ou recusar que os indivíduos tenham acesso a um serviço ou contrato. A título exemplificativo, quando um banco processa os dados dos seus clientes numa base de dados com referências de créditos de forma a perceber se pode fazer um empréstimo ou não.
+
+Assim sendo, para avaliar se um dado processamento representa um risco avaliado, os nove critérios apresentados devem ser tidos em conta. Sendo que, se dois deles forem aplicáveis, então deve ser efetuado um DPIA.
 
 ### Pergunta P1.3 - 2
 
@@ -90,8 +134,8 @@ Desta forma, a aplicação proposta respeita os critérios 3 (monitorização si
 
 ### Pergunta P1.3 - 3
 
-O *template* DPIA encontra-se no ficheiro (PIA-1.3.3)[./PIA-1.3.3.pdf].
+O *template* DPIA encontra-se no ficheiro [PIA-1.3.3](./PIA-1.3.3.pdf).
 
 ### Pergunta P1.4
 
-O *template* DPIA encontra-se no ficheiro (PIA-1.4.3)[./PIA-1.4.3.pdf].
+O *template* DPIA encontra-se no ficheiro [PIA-1.4.3](./PIA-1.4.3.pdf).
