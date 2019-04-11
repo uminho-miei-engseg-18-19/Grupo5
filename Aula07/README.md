@@ -74,7 +74,13 @@ Como existe uma entidade que armazena o mapeamento oculto (de dados originais pa
 
 Apesar da eficiência da tokenização, a sua implementação pode, dependendo do contexto, ser relativamente complexa. De facto, em várias aplicações pode ser necessário, por exemplo, a sincronização de *tokens* através de vários sistemas.
 
-7. Daniel
+#### Outras medidas
+
+Existem também outras medidas bem conhecidas cujo objetivo são pseudonimisar a informação guardada num ficheiro, sendo estas relativamente limitadas na sua aplicação:
+
++ *Masking* refere-se ao processo de esconder o identificador de um indivíduo com carateres aleatórios ou outros dados. Tal prática nem sempre pode garantir as propriedades de pseudonimização. Ainda mais, se implementado pouco cuidadosamente, poderá atribuir o mesmo pseudónimo a indivíduos diferentes, gerando colisões.
++ *Scrambling* refere-se a um conjunto de técnicas de mistura e ofuscação de carateres de um identificador. Este processo é reversível de acordo com a técnica escolhida. O *Scrambling* pode ser considerado uma forma de cifra simétrica simplificada, tornando a fraca na manutenção da pseudonimização em casos específicos.
++ *Blurring* trata-se da utilização de valores aproximados com o intuito a precisão dos dados, reduzindo a identificabilidade dos indivíduos. Esta técnica pode também ser aplicada na ofuscação de imagens no processo de pseudonimização. É de notar, no entanto, que algoritmos de reconhecimento de imagens com redes neuronais poderão ser capazes de recuperar tais imagens.
 
 ### Pergunta P1.3 - 1
 
