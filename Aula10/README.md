@@ -30,22 +30,22 @@ Entre estas, considera-se que o RGPD deve ser tido em conta durante a fase de re
 
 O NIST SP 800-64, *Security Considerations in the System Development Life Cycle*, engloba as seguintes funções e responsabilidades de segurança:
 
-+ *Authorising Official (AO)* - Daniel
++ *Authorising Official (AO)* - O AO é responsável por operar um sistema de informação a um nível de risco aceitável, recorrendo a um plano de segurança, a relatórios de análise de segurança e ao plano de ação e marcos de redução e eliminação de vulnerabilidades do sistema de informação. 
 + *Chief Information Officer (CIO)* - Mafalda
 + *Configuration Management (CM) Manager* - Afonso
-+ *Contracting Officer* - Daniel
++ *Contracting Officer* - Esta posição mantém autoridade sobre a administração dos contractos de uma organização, bem como o dever de efetuar análises e conclusões sobre os mesmos.
 + *Contracting Officer's Technical Representative* - Mafalda
 + *Information System Security Officer* - Afonso
-+ *Information Technology Investment Board* - Daniel
++ *Information Technology Investment Board* - O *IT Investment Board*, ou o seu equivalente, responsabiliza-se por manter o processo de CPIC definido pelo Acto Clinger-Cohen de 1996
 + *Legal Advisor/Contract Attorney* - Mafalda
 + *Privacy Officer* - Afonso
-+ *Program Manager/Official (Information Owner)* - Daniel
++ *Program Manager/Official (Information Owner)* - Esta é a figura representativa os interesses de negócio e programação no sistema de informação durante o SDLC, tomando um papel essencial na manutenção da sua segurança e tendo um conhecimento profundo dos seus requisitos funcionais.
 + *QA/Test Director* - Mafalda
 + *Senior Agency Information Security Officer (SAISO)* - Afonso
-+ *Software Developer* - Daniel
++ *Software Developer* - O desenvolvedor é responsável pela implementação do código, certificando-se que este é escrito de forma segura. É também responsável por coordenar com o CM para identificar, resolver e implementar cotrolos no sistema de informação.
 + *System Architect* - Mafalda
 + *System Owner* - Afonso
-+ *Other Participants* - Daniel
++ *Other Participants* - Estes incluem uma variedade de papéis, tais como oficiais de segurança, utilizadores do sistema, entre outros. Tais participantes trabalham em conjunto com os membros da equipa de desenvolvimento onde necessário, a sua quantidade variando de acordo com a complexidade do sistema ao longo do tempo.
 
 Relativamente aos projetos desenvolvidos pelo grupo, considera-se que apenas os papéis de *CM Manager, QA/Test Director, Software Developer, System Architect* e *System Owner* foram abrangidos, apesar de não se ter dado especial relevância à vertente de segurança.
 
