@@ -30,20 +30,20 @@ Entre estas, considera-se que o RGPD deve ser tido em conta durante a fase de re
 
 O NIST SP 800-64, *Security Considerations in the System Development Life Cycle*, engloba as seguintes funções e responsabilidades de segurança:
 
-+ *Authorising Official (AO)* - O AO é responsável por operar um sistema de informação a um nível de risco aceitável, recorrendo a um plano de segurança, a relatórios de análise de segurança e ao plano de ação e marcos de redução e eliminação de vulnerabilidades do sistema de informação. 
-+ *Chief Information Officer (CIO)* - Mafalda
++ *Authorising Official (AO)* - O AO é responsável por operar um sistema de informação a um nível de risco aceitável, recorrendo a um plano de segurança, a relatórios de análise de segurança e ao plano de ação e marcos de redução e eliminação de vulnerabilidades do sistema de informação.
++ *Chief Information Officer (CIO)* - Esta entidade é responsável pelo planeamento, orçamento, investimento, desempenho e aquisição do sistema de informações da organização. Assim, o CIO aconselha e assiste na aquisição do sistema de informações mais eficiente e eficaz para se adequar à arquitetura corporativa da organização.
 + *Configuration Management (CM) Manager* - Afonso
 + *Contracting Officer* - Esta posição mantém autoridade sobre a administração dos contractos de uma organização, bem como o dever de efetuar análises e conclusões sobre os mesmos.
-+ *Contracting Officer's Technical Representative* - Mafalda
++ *Contracting Officer's Technical Representative* - O COTR é um empregado qualificado indicado pelo *Contracting Officer* para atuar como seu representante técnico na gestão de aspetos técnicos de um contrato.
 + *Information System Security Officer* - Afonso
 + *Information Technology Investment Board* - O *IT Investment Board*, ou o seu equivalente, responsabiliza-se por manter o processo de CPIC definido pelo Acto Clinger-Cohen de 1996
-+ *Legal Advisor/Contract Attorney* - Mafalda
++ *Legal Advisor/Contract Attorney* - O consultor jurídico é responsável por aconselhar a equipa em questões legais durante o processo de aquisição.
 + *Privacy Officer* - Afonso
 + *Program Manager/Official (Information Owner)* - Esta é a figura representativa os interesses de negócio e programação no sistema de informação durante o SDLC, tomando um papel essencial na manutenção da sua segurança e tendo um conhecimento profundo dos seus requisitos funcionais.
-+ *QA/Test Director* - Mafalda
++ *QA/Test Director* - Este é o responsável pelo teste e avaliação do sistema e funciona como um recurso em vários programas, ao auxiliar no desenvolvimento e na execução de planos de teste em conjunto com os *Program Managers* e os clientes. Esta pessoa analisa as especificações do sistema e determina as necessidades de teste, bem como trabalha com os *Program Managers* para planear as atividades de teste.
 + *Senior Agency Information Security Officer (SAISO)* - Afonso
 + *Software Developer* - O desenvolvedor é responsável pela implementação do código, certificando-se que este é escrito de forma segura. É também responsável por coordenar com o CM para identificar, resolver e implementar cotrolos no sistema de informação.
-+ *System Architect* - Mafalda
++ *System Architect* - Como *designer* e integrador geral da aplicação, o arquiteto do sistema é responsável por criar a arquitetura de *design* geral e por manter a integridade concetual da arquitetura durante todo o ciclo de vida do projeto. O *System Architect* também é responsável por garantir a qualidade dos produtos de trabalho técnico fornecidos pela equipa do projeto, incluindo *designs*, especificações, procedimentos e documentação.
 + *System Owner* - Afonso
 + *Other Participants* - Estes incluem uma variedade de papéis, tais como oficiais de segurança, utilizadores do sistema, entre outros. Tais participantes trabalham em conjunto com os membros da equipa de desenvolvimento onde necessário, a sua quantidade variando de acordo com a complexidade do sistema ao longo do tempo.
 
