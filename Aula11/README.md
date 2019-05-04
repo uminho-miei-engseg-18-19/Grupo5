@@ -12,13 +12,73 @@ TODO: Daniel
 
 ### Pergunta P1.3 - Buffer overflow
 
+O programa `RootExploit.c` tem o seguinte algoritmo:
+
+1. Lê uma *password* através da função `gets`.
+2. Compara o valor lido com a string `"csi1"`.
+3. Se for igual então a variável `pass` ficam com o valor 1.
+4. Se `pass` for 1, então tem-se permissões de *root*/*admin*.
+
+O problema reside na utilização da função `gets`, uma vez que esta não verifica o tamanho do input e o compara com o tamanho alocado para a variável que vai armazenar esse *input*. Desta forma, dado que `buff` é um array de 4 posições e a última está ocupado pelo `\0`, apenas se pode introduzir 3 caracteres. No entanto, se o utilizador continuar a escrever o programa continua a escrever para lá dos limites do `buff`.
+
+Assim sendo, se se tiver em conta a organização das variáveis em memória, é possível subverter o comportamento do algoritmo. As variáveis são armazenadas em memória da seguinte forma:
+
+```
+    STACK
++----------+ <- Endereço de memória maiores
+|   ....   |
++----------+
+|   pass   |
++----------+
+| buff[4]  |
++----------+
+|   ....   |
++----------+ <- Endereço de memória menores
+```
+
+Desta forma, se se continuar a escrever no `buff` para além dos seus limites, começa-se a escrever na variável `pass` e a alterar o seu valor. A seguinte figura mostra isso mesmo:
+
+![RootExploit](./images/P1_3_RootExploit.PNG)
+
+Na prática, a porção do input `123` preencheu as 3 primeiras posições do `buff`. O valor `4` escreveu por cima do `\0` e por fim o último `1` escreveu na variável `pass`. Assim, apesar da `password` estar errada, a variável `pass` ficou a `1` e obteve-se privilégios de *root*/*admin*.
+
+---
+
+O programa `0-simple.c` tem o seguinte algoritmo:
+
+1. A variável `control` é inicializada a `0`.
+2. É lida uma *password* através da função `gets`.
+3. Se a variável `control` for diferente de `0`, ganha-se.
+
+Da mesma forma, este programa utiliza a função `gets` que não é segura como já foi referido anteriormente. Assim é possível através da variável `buffer` corromper a memória e escrever na variável `control`. As variáveis são armazenadas em memória da seguinte forma:
+
+```
+    STACK
++------------+ <- Endereço de memória maiores
+|    ....    |
++------------+
+|  control   |
++------------+
+| endereço?  |
++------------+
+| buffer[64] |
++------------+
+|    ....    |
++------------+ <- Endereço de memória menores
+```
+
+Assim sendo, foi possível explorar a vulnerabilidade oferecida pela função `gets`, da seguinte forma:
+
+![0-simple](./images/P1_3_0_simple.PNG)
+
+A resposta envolve inserir um `input` com um tamanho 77. Os primeiros 64 caracteres servem para encher o array `buffer` inclusive a última posição que é do `\0`. Os próximos 12 caracteres (TODO: acabar). Por fim, o último caractere vai preencher a variável control e torná-la diferente de 0.
+
+
 > DÚVIDA: 64 bytes (buffer) + 12 bytes => control
 
 bc &control
    endereço?
 70 &buffer
-
-TODO: Afonso
 
 ### Pergunta P1.4 - Read overflow
 
@@ -32,13 +92,11 @@ TODO: Daniel
 
 ### Pergunta P2.1
 
-TODO: Afonso
+A vulnerabilidade presente na função `vulneravel` está relacionada com a realização de operações com `size_t` (inteiros positivos) sem verificar possíveis situações de *overflow*/*underflow*.
+
+Assim sendo, uma possível execução que origina uma situação de *overflow* é a seguinte:
 
 ```c
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-
 void vulneravel (char *matriz, size_t x, size_t y, char valor) {
     int i, j;
 
@@ -51,7 +109,6 @@ void vulneravel (char *matriz, size_t x, size_t y, char valor) {
             matriz[i*y+j] = valor;
         }
     }
-
 }
 
 int main() {
@@ -61,6 +118,14 @@ int main() {
     return 0;
 }
 ```
+
+O resultado obtido é o seguinte:
+
+![Overflow](./images/P2_1_result.PNG)
+
+Na prática apenas se aloca espaço para um `char` na variável `matriz` que fica preenchido pelo `\0` por ser uma string. Tendo em conta que o `SIZE_MAX` é o valor máximo que um `size_t` pode tomar, quando no `malloc` se faz `x*y` (`SIZE_MAX*SIZE_MAX`), origina-se um *overflow* e o resultado da operação é 1. No entanto, quando se vai a preencher a `matriz` nos ciclos `for` endereça-se posições para lá dos limites da variável `matriz`, pois as variáveis `x` e `y` são valores enormes.
+
+Por fim, é de salientar que o programa termina em `Segmentation fault` devido ao facto de estar a preencher valores para lá dos limites da `matriz`.
 
 ### Pergunta P2.2
 
