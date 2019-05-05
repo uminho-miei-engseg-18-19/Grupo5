@@ -4,7 +4,63 @@
 
 ### Pergunta P1.1 - Buffer overflow em várias linguagens
 
-TODO: Mafalda
+O programa `LOverflow2`, escrito em Java, Python e C++, começa por solicitar a introdução de quantos números se pretende indicar. De seguida, são lidos e armazenados num *array* estático, com 10 posições, tantos números quantos os especificados.
+
+O problema deste programa centra-se na ausência de verificação do primeiro valor inserido, isto é, se a quantidade de números que se pretende indicar é inferior ou igual a 10. Para além disso, nem sequer é validado se o *input* introduzido corresponde a um inteiro.
+
+Assim, consideraram-se várias situações que pudessem representar as vulnerabilidades do programa, nas várias linguagens:
+
+1. Inserção de uma quantidade de números muito superior a 10;
+2. Inserção de uma quantidade de números negativa;
+3. Inserção de um número, cujo valor é muito grande, podendo causar *overflow* de inteiros;
+4. Inserção de letras, em vez de números;
+5. Tentativa de invocação de funções (no caso da linguagem Python).
+
+Relativamente ao programa escrito em **Java**, verificou-se que nos casos de inserção de valores muito elevados ou com *inputs* não inteiros (o que inclui invocação de funções), é lançada uma exceção. Para além disso, quando é inserida uma quantidade de números negativa, não é solicitado nenhum valor. O *output* gerado pelo programa Java para estas situações é apresentado na imagem que se segue.
+
+![P1_1_Java](./images/P1_1_Java.PNG)
+
+Quanto ao programa escrito em **Python**, continuou a verificar-se o lançamento de exceções no caso da introdução de inteiros demasiado elevados (*overflow*). Na introdução de uma quantidade de números negativa, ainda se constatou que simplesmente não era solicitado nenhum valor.
+
+Um aspeto preocupante que se verifica com o recurso à função `input` do Python, é que a expressão lida do *stdin* é executada, como se de um script se tratasse. Assim, a introdução de `1+1` é equivalente à introdução do *input* `2`.
+
+Todas estas experiências são apresentadas na imagem que se segue.
+
+![P1_1_Python](./images/P1_1_Python.PNG)
+
+De forma a explorar a vulnerabilidade associada à utilização da função `input`, optou-se por acrescentar uma função `segredo` ao *script*, que simplesmente imprime uma mensagem secreta:
+
+```python
+def segredo():
+    print 'SEGREDO'
+
+tests=[None]*10
+count = input("Quantos numeros? ")
+for i in range (0,count-1):
+    test = input ("Insira numero: ")
+    tests[i]=test
+```
+
+Sem efetuar qualquer alteração ao restante programa, conseguiu-se imprimir no terminal a mensagem secreta, conforme apresentado na imagem que se segue.
+
+![P1_1_Python_result](./images/P1_1_Python_change_result.PNG)
+
+Por fim, para o programa escrito em **C++**, verificou-se que a inserção de uma quantidade de números ligeiramente superior ao suportado (10), faz com que de seguida sejam solicitados mais valores do que o indicado. Caso se introduza uma quantidade de números bastante superior, o programa começa a solicitar a inserção de números repetidamente, sem parar, conforme se pode verificar na figura apresentada de seguida.
+
+![P1_1_CPP_01](./images/P1_1_cpp_01.PNG)
+
+A introdução de uma quantidade de números negativa continua a ter o mesmo resultado que para as restantes linguagens, isto é, não é solicitada a inserção de nenhum valor.
+
+![P1_1_CPP_02](./images/P1_1_cpp_02.PNG)
+
+Após indicação de uma quantidade de números válida, caso se introduza um valor que cause *overflow*, as restantes solicitações de valores são impressas e o programa termina, sem introdução de mais qualquer *input* por parte do utilizador.
+
+![P1_1_CPP_03](./images/P1_1_cpp_03.PNG)
+
+Quando se introduzem *inputs* não inteiros, obtêm-se os resultados apresentados na imagem abaixo. Caso se indique uma quantidade de números válida, seguida da introdução de uma letra, por exemplo, ocorre uma situação semelhante à introdução de um número que cause *overflow* nesta fase. Caso se insira essa letra na quantidade de números, simplesmente não é solicitada a introdução de nenhum valor.
+
+![P1_1_CPP_04](./images/P1_1_cpp_04.PNG)
+
 
 ### Pergunta P1.2 - Buffer overflow em várias linguagens
 
@@ -105,7 +161,30 @@ bc &control
 
 ### Pergunta P1.4 - Read overflow
 
-TODO: Mafalda
+O programa `ReadOverflow.c` tem o seguinte algoritmo:
+
+1. Lê uma quantidade de caracteres através da função `fgets`.
+2. Converte o valor lido para inteiro (`n`) através da função `atoi`.
+3. Lê uma frase através da função `fgets`.
+4. Imprime os primeiros `n` caracteres presentes no *buffer* (o próprio, se for imprimível, e um '.', caso contrário).
+5. Regressa a 1.
+
+A utilização da função `fgets` já efetua uma validação do tamanho do *input* introduzido, sendo lido apenas tantos caracteres quantos puderem ser armazenados no *buffer* associado.
+
+Contudo, o valor introduzido no passo `1` deve ser um inteiro, o que não é validado neste programa. A utilização da função `atoi` faz com que só seja lido os inteiros no início do *input*, antes de qualquer caracter não numérico. Assim, se for introduzida uma letra, por exemplo, o inteiro ficará com o valor 0.
+
+A introdução de um inteiro negativo para o número de caracteres fará com que sejam impressos 0 caracteres da frase.
+
+Tendo estes fatores em consideração, consegue-se perceber os *outputs* gerados pelo programa para alguns *inputs* básicos, apresentados na imagem que se segue.
+
+![RootExploit](./images/P1_4_ReadOverflow_simple.PNG)
+
+Nenhum destes comportamentos é considerado de risco, tendo em conta que não é possibilitada a introdução de conteúdo fora do espaço alocado nem o acesso indevido a dados.
+
+No entanto, como o *buffer* não é limpo e o número de caracteres indicado não é comparado com o tamanho da *string* inserida, há a possibilidade de ocorrência de um *read overflow*. Isto é, consegue-se ler conteúdo de zonas do *buffer* que não foram escritas pela frase inserida, mas sim por outras anteriores. Este caso é demonstrado na figura que se segue.
+
+![RootExploit](./images/P1_4_ReadOverflow.PNG)
+
 
 ### Pergunta P1.5
 
@@ -167,7 +246,9 @@ Por fim, é de salientar que o programa termina em `Segmentation fault` devido a
 
 ### Pergunta P2.2
 
-TODO: Mafalda
+A vulnerabilidade presente na função `vulneravel` está, mais uma vez, relacionada com a realização de operações com `size_t` (inteiros positivos) sem verificar possíveis situações de *underflow* (a situação de *overflow* já é considerada).
+
+Assim sendo, uma possível execução que origina uma situação de *underflow* é a seguinte:
 
 ```c
 #include <stdio.h>
@@ -182,8 +263,9 @@ void vulneravel (char *origem, size_t tamanho) {
     char *destino;
     if (tamanho < MAX_SIZE) {
         tamanho_real = tamanho - 1; // Não copiar \0 de origem para destino
-        destino = (char *) malloc(tamanho_real);
         printf("%zu\n", tamanho_real);
+        destino = (char *) malloc(tamanho_real);
+        printf("%p\n", destino);
         memcpy(destino, origem, tamanho_real);
         printf("%s\n", destino);
     }
@@ -194,3 +276,11 @@ int main() {
     vulneravel(origem, 0);
 }
 ```
+
+O resultado obtido é o seguinte:
+
+![Underflow](./images/P2_2_result.PNG)
+
+O que acontece é que, como a função `vulneravel` apenas valida se o argumento `tamanho` não é superior a um valor máximo antes de efetuar operações com o mesmo, quando se define o `tamanho` como sendo 0, a variável `tamanho_real` (`tamanho - 1`) fica com um valor enorme (*underflow*). Contudo, a função `malloc` retorna um apontador nulo, devido à incapacidade de reservar tanto espaço de memória.
+
+Desta forma, quando a função `memcpy` tenta aceder ao apontador `destino` (nulo) para escrever os dados necessários, o programa termina com `Segmentation fault`.
