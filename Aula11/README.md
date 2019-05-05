@@ -8,7 +8,30 @@ TODO: Mafalda
 
 ### Pergunta P1.2 - Buffer overflow em várias linguagens
 
-TODO: Daniel
+O programa `LOverflow3` tem o seguinte algoritmo:
+
+1. Inicializa um *array*/lista `vals` de inteiros com um tamanho de 10.
+2. Lê um número `count` que determina a quantidade de valores que será guardado no *array*.
+3. Preenche `vals` com o `count` elementos.
+4. Lê um número `which` e imprime o valor `vals[which]`.
+
+No caso do programa em Java, a proteção interna contra ataques de *buffer overflow* faz com que quaisquer tentativas de acesso à memória exterior a `vals` resulte no levantamento de uma exceção:
+
+![LOverflow3.java](./images/P1_2_Java.PNG)
+
+
+No caso do programa em Python, não é possível obter dados exteriores aos limites da lista. Ainda assim, é possível extrair valores de defeito em casos nos quais a lista não é preenchida por completo, bem como instruir o programa a preencher a lista por ordem inversa:
+
+![LOverflow3.py](./images/P1_2_Python_01.PNG)
+
+
+![LOverflow3.py](./images/P1_2_Python_02.PNG)
+
+
+No caso do programa em C++, devido à falta de mecanismos de proteção contra este tipo de ataque, é possível explorar o algoritmo de modo a extrair dados exteriores ao *array*: 
+
+![LOverflow3.cpp](./images/P1_2_cpp.PNG)
+
 
 ### Pergunta P1.3 - Buffer overflow
 
@@ -86,7 +109,22 @@ TODO: Mafalda
 
 ### Pergunta P1.5
 
-TODO: Daniel
+O programa `1-match.c` tem o seguinte algoritmo:
+
+1. Lê uma *string* como argumento da linha de comandos durante o arranque do programa.
+2. Inicializa a variável *integer* `control` a 0.
+3. Copia o argumento da linha de comandos para o *array* `buffer` através da função `strcpy`.
+4. Compara o valor da variável `control` com o valor hexadecimal `0x61626364`.
+5. Se for igual então o programa mostra uma mensagem `congratulations`.
+6. Senão, mostra uma mensagem `try again` e demonstra o valor de `control`.
+
+O problema reside na utilização do método utilizado com o programa `0-simple.c` em conjunto com um conjunto de carateres cujo valor inteiro corresponda a `0x61626364`. Deste modo, é introduzido o argumento na linha de comandos de modo a que este preencha o `buffer` e sobreponha o valor do `control` quando é chamada a função `strcpy`. 
+
+Para tal, verificou-se os valores hexadecimais dos carateres ASCII, determinando-se que os valores `0x61`, `0x62`, `0x63` e `0x64` correspondem aos carateres `a`, `b`, `c` e `d`, respetivamente. Sabendo isto, foi apenas necessário determinar o *endianness* da máquina virtual. Utilizando o próprio programa para tal, observou-se que este guarda os dados no modo *little-endian*, no qual os dados são armazenados por ordem inversa. Como tal, a resposta envolve inserir um argumento de tamanho 80, no qual os últimos 4 carateres são a sequência `dcba`
+
+Assim sendo, foi possível explorar a vulnerabilidade oferecida pelo programa da seguinte forma:
+
+![1-match](./images/P1_5_1match.PNG)
 
 ## 2. Vulnerabilidade de inteiros
 
